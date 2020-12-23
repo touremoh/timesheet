@@ -22,7 +22,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
-    <springboot.version>2.3.5</springboot.version>
+    <springboot.version>2.3.5.RELEASE</springboot.version>
     <springdoc.version>1.5.0</springdoc.version>
     <jdbc.version>12.2.0.1</jdbc.version>
     <rest-assured.version>4.3.0</rest-assured.version>
@@ -30,6 +30,7 @@
     <lombok.version>1.18.12</lombok.version>
     <h2.version>1.4.197</h2.version>
     <wiremock.version>2.26.3</wiremock.version>
+    <java.version>14</java.version>
   </properties>
 
   <dependencyManagement>
