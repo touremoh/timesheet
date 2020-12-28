@@ -3,6 +3,12 @@ spring:
     url: jdbc:postgresql://localhost:5431/timesheetdb
     initialization-mode: always
     platform: postgresql
+    driver-class-name: org.postgresql.Driver
+    schema:
+      - classpath:schema-postgres.sql
+    data:
+      - classpath:data-postgres.sql
+
   jpa:
     show-sql: true
     hibernate:
