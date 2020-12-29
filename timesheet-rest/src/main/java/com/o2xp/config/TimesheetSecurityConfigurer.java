@@ -13,6 +13,8 @@ public class TimesheetSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http
            .authorizeRequests()
                 .antMatchers("/", "/**")
-                    .permitAll();
+                    .permitAll()
+           .and()
+           .csrf().disable();
     }
 }

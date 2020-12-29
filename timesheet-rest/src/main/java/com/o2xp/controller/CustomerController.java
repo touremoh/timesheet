@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +45,7 @@ public class CustomerController {
             return new ResponseEntity<>(customers.get(), HttpStatus.OK);
         }
         log.warn("Customers not found");
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @Operation(summary = "Customers finding service", description = "Finding customer by ID")
@@ -66,29 +67,59 @@ public class CustomerController {
             return new ResponseEntity<>(customer.get(), HttpStatus.OK);
         }
         log.warn("Customer with ID ["+id+"] not found");
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @Operation(summary = "Customers creation service", description = "Creating new customer")
     @ApiResponse(
-            responseCode = "200",
-            description = "Returns the created customer",
+            responseCode = "201",
+            description = "Returns the customer newly created",
+            content = { @Content(schema = @Schema(anyOf = { Customer.class })) }
+    )
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Customer> addCustomer(@RequestBody  Customer newCustomer) {
+        Customer customerSaved = this.customerService.save(newCustomer);
+        return new ResponseEntity<>(customerSaved, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Customers updating service", description = "Update an existing customer")
+    @ApiResponse(
+            responseCode = "201",
+            description = "Returns the updated customer",
             content = { @Content(schema = @Schema(anyOf = { Customer.class })) }
     )
     @ApiResponse(
-            responseCode = "400",
-            description = "No customer was found in the DB",
+            responseCode = "404",
+            description = "The customer to update was not found",
             content = { @Content(schema = @Schema(hidden = true)) }
     )
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Customer> addCustomer(@RequestBody  Customer newCustomer) {
-        Customer customerSaved = this.customerService.save(newCustomer);
+    @PatchMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Customer> patchCustomer(@PathVariable Long id, @RequestBody Customer newCustomer) {
+        Optional<Customer> customerToUpdate = this.customerService.findById(id);
 
-        if (newCustomer.getReference().equals(customerSaved.getReference())) {
-            log.info("Customer created");
-            return new ResponseEntity<>(customerSaved, HttpStatus.OK);
+        if (customerToUpdate.isPresent()) {
+            Customer customer = customerToUpdate.get();
+            if (newCustomer.getId() != null) {
+                customer.setId(newCustomer.getId());
+            }
+            if (newCustomer.getReference() != null) {
+                customer.setReference(newCustomer.getReference());
+            }
+            if (newCustomer.getName() != null) {
+                customer.setName(customer.getName());
+            }
+            if (newCustomer.getCreatedAt() != null) {
+                customer.setCreatedAt(newCustomer.getCreatedAt());
+            }
+            customer.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            return new ResponseEntity<>(this.customerService.save(customer), HttpStatus.CREATED);
         }
-        log.warn("Customer not created");
-        return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @Operation(summary = "Customers deletion service", description = "Delete an existing customer")
+    @DeleteMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deletedCustomer(@PathVariable Long id) {
+        this.customerService.deleted(id);
     }
 }

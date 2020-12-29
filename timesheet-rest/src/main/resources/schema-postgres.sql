@@ -1,5 +1,6 @@
 drop schema timesheet_o2xp cascade;
 create schema timesheet_o2xp;
+create sequence timesheet_o2xp.hibernate_sequence;
 
 create table if not exists timesheet_o2xp.user_profile (
    id bigint primary key,
@@ -81,5 +82,7 @@ alter table timesheet_o2xp.input_time
 
 
 
+alter sequence timesheet_o2xp.hibernate_sequence owner to mohamedtoure;
+alter sequence timesheet_o2xp.hibernate_sequence restart with 1000;
 
 
