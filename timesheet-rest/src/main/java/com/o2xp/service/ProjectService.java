@@ -30,6 +30,11 @@ public class ProjectService implements TimesheetService<Project>{
     }
 
     @Override
+    public Project update(Long id, Project o) {
+        return null;
+    }
+
+    @Override
     public void delete(Long id) {
         this.projectRepository.deleteById(id);
     }

@@ -35,7 +35,8 @@ public class TaskService implements TimesheetService<Task> {
         this.taskRepository.deleteById(id);
     }
 
-    public Task updateTask(Long id, Task newTask) {
+    @Override
+    public Task update(Long id, Task newTask) {
         Optional<Task> optionalTask = this.findById(id);
 
         if (optionalTask.isPresent()) {

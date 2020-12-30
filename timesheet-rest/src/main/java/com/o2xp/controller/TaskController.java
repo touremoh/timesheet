@@ -92,7 +92,7 @@ public class TaskController {
     )
     @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task newTask) {
-        Optional<Task> optionalTask = Optional.ofNullable(this.service.updateTask(id, newTask));
+        Optional<Task> optionalTask = Optional.ofNullable(this.service.update(id, newTask));
 
         if (optionalTask.isPresent()) {
             return new ResponseEntity<>(optionalTask.get(), HttpStatus.CREATED);
@@ -100,6 +100,12 @@ public class TaskController {
 
         log.warn("No task to update was found with ID ["+id+"]");
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTask(@PathVariable  Long id) {
+        this.service.delete(id);
     }
 
 }

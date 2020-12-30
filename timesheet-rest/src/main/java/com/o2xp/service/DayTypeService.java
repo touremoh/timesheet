@@ -30,6 +30,11 @@ public class DayTypeService implements TimesheetService<DayType> {
     }
 
     @Override
+    public DayType update(Long id, DayType o) {
+        return null;
+    }
+
+    @Override
     public void delete(Long id) {
         this.dayTypeRepository.deleteById(id);
     }

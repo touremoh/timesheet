@@ -39,4 +39,20 @@ public class Contract {
         this.createdAt = new Timestamp(System.currentTimeMillis());
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
+
+    public boolean hasStartingDt() {
+        return this.startingDt != null;
+    }
+
+    public boolean hasEndingDt() {
+        return this.endingDt != null;
+    }
+
+    public boolean hasCustomer() {
+        return this.customer != null;
+    }
+
+    public boolean hasUser() {
+        return this.userProfile != null;
+    }
 }

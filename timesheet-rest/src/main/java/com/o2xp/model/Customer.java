@@ -27,6 +27,10 @@ public class Customer {
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
+    public boolean hasID() {
+        return this.id != null;
+    }
+
     public boolean hasName() {
         return this.name != null && !this.name.isEmpty();
     }

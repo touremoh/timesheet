@@ -30,6 +30,11 @@ public class InputTimeService implements TimesheetService<InputTime> {
     }
 
     @Override
+    public InputTime update(Long id, InputTime o) {
+        return null;
+    }
+
+    @Override
     public void delete(Long id) {
         this.inputTimeRepository.deleteById(id);
     }

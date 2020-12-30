@@ -93,10 +93,10 @@ public class CustomerController {
             description = "The customer to update was not found",
             content = { @Content(schema = @Schema(hidden = true)) }
     )
-    @PatchMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Customer> patchCustomer(@PathVariable Long id, @RequestBody Customer newCustomer) {
         Optional<Customer> updateResponse =
-                Optional.ofNullable(this.customerService.updateCustomer(id, newCustomer));
+                Optional.ofNullable(this.customerService.update(id, newCustomer));
 
         return updateResponse
                 .map(customer -> new ResponseEntity<>(customer, HttpStatus.CREATED))
