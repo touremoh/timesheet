@@ -119,6 +119,7 @@ public class CustomerController {
 
     @Operation(summary = "Customers deletion service", description = "Delete an existing customer")
     @DeleteMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletedCustomer(@PathVariable Long id) {
         this.customerService.deleted(id);
     }
