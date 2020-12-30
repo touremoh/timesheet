@@ -23,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/customers")
 public class CustomerController {
+
     private final CustomerService customerService;
 
     @Operation(summary = "Customers finding service", description = "Finding all customers")
@@ -121,6 +122,6 @@ public class CustomerController {
     @DeleteMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletedCustomer(@PathVariable Long id) {
-        this.customerService.deleted(id);
+        this.customerService.delete(id);
     }
 }

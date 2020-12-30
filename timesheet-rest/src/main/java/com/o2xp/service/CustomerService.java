@@ -11,22 +11,26 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService {
+public class CustomerService implements TimesheetService<Customer> {
     private final CustomerRepository customerRepository;
 
+    @Override
     public List<Customer> findAll() {
         return this.customerRepository.findAll();
     }
 
+    @Override
     public Optional<Customer> findById(Long id) {
         return this.customerRepository.findById(id);
     }
 
+    @Override
     public Customer save(Customer customer) {
         return this.customerRepository.save(customer);
     }
 
-    public void deleted(Long customerId) {
+    @Override
+    public void delete(Long customerId) {
         this.customerRepository.deleteById(customerId);
     }
 }
