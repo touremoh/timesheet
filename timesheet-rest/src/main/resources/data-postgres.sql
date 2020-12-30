@@ -4,7 +4,7 @@
 insert into timesheet_o2xp.user_profile (id, first_name, last_name, username, password, created_at, updated_at)
 values (1, 'Mohamed', 'Toure', 'mtoure', 'mt123', to_timestamp('2020-12-22 12:30:20', 'YYYY-MM-DD HH:MI:SS'), to_timestamp('2020-12-22 12:30:20', 'YYYY-MM-DD HH:MI:SS'));
 insert into timesheet_o2xp.user_profile (id, first_name, last_name, username, password, created_at, updated_at)
-values (2, 'Jean Michel', 'Delseaux', 'jmdelseaux', 'jm123', to_timestamp('2020-12-22 12:30:20', 'YYYY-MM-DD HH:MI:SS'), to_timestamp('2020-12-22 12:30:20', 'YYYY-MM-DD HH:MI:SS'));
+values (2, 'Jean Michel', 'Delsaux', 'jmdelsaux', 'jm123', to_timestamp('2020-12-22 12:30:20', 'YYYY-MM-DD HH:MI:SS'), to_timestamp('2020-12-22 12:30:20', 'YYYY-MM-DD HH:MI:SS'));
 insert into timesheet_o2xp.user_profile (id, first_name, last_name, username, password, created_at, updated_at)
 values (3, 'Arnaud', 'Cordier', 'acordier', 'ac123', to_timestamp('2020-12-22 12:30:20', 'YYYY-MM-DD HH:MI:SS'), to_timestamp('2020-12-22 12:30:20', 'YYYY-MM-DD HH:MI:SS'));
 
