@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,26 +95,12 @@ public class CustomerController {
     )
     @PatchMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Customer> patchCustomer(@PathVariable Long id, @RequestBody Customer newCustomer) {
-        Optional<Customer> customerToUpdate = this.customerService.findById(id);
+        Optional<Customer> updateResponse =
+                Optional.ofNullable(this.customerService.updateCustomer(id, newCustomer));
 
-        if (customerToUpdate.isPresent()) {
-            Customer customer = customerToUpdate.get();
-            if (newCustomer.getId() != null) {
-                customer.setId(newCustomer.getId());
-            }
-            if (newCustomer.getReference() != null) {
-                customer.setReference(newCustomer.getReference());
-            }
-            if (newCustomer.getName() != null) {
-                customer.setName(customer.getName());
-            }
-            if (newCustomer.getCreatedAt() != null) {
-                customer.setCreatedAt(newCustomer.getCreatedAt());
-            }
-            customer.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-            return new ResponseEntity<>(this.customerService.save(customer), HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return updateResponse
+                .map(customer -> new ResponseEntity<>(customer, HttpStatus.CREATED))
+                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
     @Operation(summary = "Customers deletion service", description = "Delete an existing customer")
