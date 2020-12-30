@@ -5,7 +5,7 @@ import com.o2xp.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +33,19 @@ public class TaskService implements TimesheetService<Task> {
     @Override
     public void delete(Long id) {
         this.taskRepository.deleteById(id);
+    }
+
+    public Task updateTask(Long id, Task newTask) {
+        Optional<Task> optionalTask = this.findById(id);
+
+        if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+            if (newTask.hasName()) {
+                task.setName(newTask.getName());
+            }
+            task.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            return this.taskRepository.save(task);
+        }
+        return null;
     }
 }

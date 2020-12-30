@@ -22,4 +22,8 @@ public class Task {
         this.createdAt = new Timestamp(System.currentTimeMillis());
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
+
+    public boolean hasName() {
+        return this.name != null && !this.name.isEmpty();
+    }
 }
