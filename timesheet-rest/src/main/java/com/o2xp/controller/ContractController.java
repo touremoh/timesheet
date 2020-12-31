@@ -4,6 +4,7 @@ package com.o2xp.controller;
 import com.o2xp.dto.ContractDTO;
 import com.o2xp.mapper.ContractMapper;
 import com.o2xp.model.Contract;
+import com.o2xp.model.Customer;
 import com.o2xp.model.Task;
 import com.o2xp.service.ContractService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,11 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +49,17 @@ public class ContractController {
                 .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED));
     }
 
+    @Operation(summary = "Contracts finding service", description = "Finding all contracts")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Returns the list of contracts found",
+            content = { @Content(schema = @Schema(anyOf = { Customer.class })) }
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "No contract was found",
+            content = { @Content(schema = @Schema(hidden = true)) }
+    )
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ContractDTO>> findAllContracts() {
         Optional<List<Contract>> optionalList = Optional.ofNullable(this.service.findAll());
@@ -67,4 +75,59 @@ public class ContractController {
                     return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
                 });
     }
+
+    @Operation(summary = "Contracts finding service", description = "Finding one contract")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Returns the contract that was found",
+            content = { @Content(schema = @Schema(anyOf = { Customer.class })) }
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "No contract was found",
+            content = { @Content(schema = @Schema(hidden = true)) }
+    )
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ContractDTO> findContractById(Long id) {
+        Optional<Contract> optionalContract = this.service.findById(id);
+        return optionalContract
+                .map(contract -> new ResponseEntity<>(ContractMapper.INSTANCE.toDTO(contract), HttpStatus.OK))
+                .orElseGet(() -> {
+                    log.warn("No contract was found with ID ["+id+"]");
+                    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                });
+    }
+
+
+    @Operation(summary = "Contracts updating service", description = "Updating one contract")
+    @ApiResponse(
+            responseCode = "201",
+            description = "Returns the contract that was updated",
+            content = { @Content(schema = @Schema(anyOf = { Customer.class })) }
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "No contract to update was found",
+            content = { @Content(schema = @Schema(hidden = true)) }
+    )
+    @PatchMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ContractDTO> updateContract(@PathVariable Long id, @RequestBody ContractDTO contractDTO) {
+        Optional<Contract> optionalContract =
+                Optional.ofNullable(this.service.update(id, ContractMapper.INSTANCE.toModel(contractDTO)));
+
+        return optionalContract
+                .map(contract -> new ResponseEntity<>(ContractMapper.INSTANCE.toDTO(contract), HttpStatus.CREATED))
+                .orElseGet(() -> {
+                    log.warn("The contract was not updated");
+                    return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+                });
+    }
+
+    @Operation(summary = "Contract deletion service", description = "Delete an existing contract")
+    @DeleteMapping(path = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteContract(@PathVariable Long id) {
+        this.service.delete(id);
+    }
+
 }
