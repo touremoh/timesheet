@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,12 +53,14 @@ public class ContractController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Contract>> findAllContracts() {
+    public ResponseEntity<List<ContractDTO>> findAllContracts() {
         Optional<List<Contract>> optionalList = Optional.ofNullable(this.service.findAll());
         return optionalList
                 .map(contracts -> {
                     log.info("Contracts found ["+contracts.size()+"]");
-                    return new ResponseEntity<>(contracts, HttpStatus.OK);
+                    List<ContractDTO> contractDTOS = new ArrayList<>();
+                    contracts.forEach(contract -> contractDTOS.add(ContractMapper.INSTANCE.toDTO(contract)));
+                    return new ResponseEntity<>(contractDTOS, HttpStatus.OK);
                 })
                 .orElseGet(() -> {
                     log.warn("No contract was found");

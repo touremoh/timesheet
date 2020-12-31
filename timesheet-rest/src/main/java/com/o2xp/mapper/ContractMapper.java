@@ -14,7 +14,7 @@ public interface ContractMapper {
     @Mapping(source = "contract.userProfile.id", target = "userProfile.id")
     ContractDTO toDTO(Contract contract);
 
-    @Mapping(source = "dto.customer.id", target = "customer.id")
-    @Mapping(source = "dto.userProfile.id", target = "userProfile.id")
-    Contract toModel(ContractDTO dto);
+    @Mapping(source = "contractDTO.customer.id", target = "customer.id")
+    @Mapping(source = "contractDTO.userProfile.id", target = "userProfile.id")
+    Contract toModel(ContractDTO contractDTO);
 }
