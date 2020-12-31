@@ -88,7 +88,7 @@ public class ContractController {
             content = { @Content(schema = @Schema(hidden = true)) }
     )
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ContractDTO> findContractById(Long id) {
+    public ResponseEntity<ContractDTO> findContractById(@PathVariable Long id) {
         Optional<Contract> optionalContract = this.service.findById(id);
         return optionalContract
                 .map(contract -> new ResponseEntity<>(ContractMapper.INSTANCE.toDTO(contract), HttpStatus.OK))
