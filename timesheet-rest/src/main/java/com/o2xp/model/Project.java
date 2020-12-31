@@ -30,4 +30,28 @@ public class Project {
         this.createdAt = new Timestamp(System.currentTimeMillis());
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
+
+    public boolean hasName() {
+        return this.name != null && !this.name.isEmpty();
+    }
+
+    public boolean hasDescription() {
+        return this.description != null && !this.description.isEmpty();
+    }
+
+    public boolean hasStartingDt() {
+        return this.startingDt != null;
+    }
+
+    public boolean hasEndingDt() {
+        return this.endingDt != null;
+    }
+
+    public boolean hasID() {
+        return this.id != null;
+    }
+
+    public boolean hasContract() {
+        return this.contract != null;
+    }
 }

@@ -4,7 +4,6 @@ package com.o2xp.controller;
 import com.o2xp.dto.ContractDTO;
 import com.o2xp.mapper.ContractMapper;
 import com.o2xp.model.Contract;
-import com.o2xp.model.Customer;
 import com.o2xp.model.Task;
 import com.o2xp.service.ContractService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +52,7 @@ public class ContractController {
     @ApiResponse(
             responseCode = "200",
             description = "Returns the list of contracts found",
-            content = { @Content(schema = @Schema(anyOf = { Customer.class })) }
+            content = { @Content(schema = @Schema(anyOf = { Contract.class })) }
     )
     @ApiResponse(
             responseCode = "404",
@@ -80,7 +79,7 @@ public class ContractController {
     @ApiResponse(
             responseCode = "200",
             description = "Returns the contract that was found",
-            content = { @Content(schema = @Schema(anyOf = { Customer.class })) }
+            content = { @Content(schema = @Schema(anyOf = { Contract.class })) }
     )
     @ApiResponse(
             responseCode = "404",
@@ -103,7 +102,7 @@ public class ContractController {
     @ApiResponse(
             responseCode = "201",
             description = "Returns the contract that was updated",
-            content = { @Content(schema = @Schema(anyOf = { Customer.class })) }
+            content = { @Content(schema = @Schema(anyOf = { Contract.class })) }
     )
     @ApiResponse(
             responseCode = "404",

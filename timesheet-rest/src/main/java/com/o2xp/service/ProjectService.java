@@ -5,6 +5,7 @@ import com.o2xp.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +31,25 @@ public class ProjectService implements TimesheetService<Project>{
     }
 
     @Override
-    public Project update(Long id, Project o) {
-        return null;
+    public Project update(Long id, Project newData) {
+        Optional<Project> optionalProject = this.projectRepository.findById(id);
+
+        return optionalProject
+                .map(project -> {
+                    if (newData.hasName())
+                        project.setName(newData.getName());
+                    if (newData.hasDescription())
+                        project.setDescription(newData.getDescription());
+                    if (newData.hasContract())
+                        project.setContract(newData.getContract());
+                    if (newData.hasStartingDt())
+                        project.setStartingDt(newData.getStartingDt());
+                    if (newData.hasEndingDt())
+                        project.setEndingDt(newData.getEndingDt());
+                    project.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+                    return this.projectRepository.save(project);
+                })
+                .orElse( null);
     }
 
     @Override
