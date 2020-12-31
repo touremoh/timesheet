@@ -39,6 +39,7 @@ public class ProjectController {
         Project savedProject = this.service.save(ProjectMapper.INSTANCE.toModel(projectDTO));
         return new ResponseEntity<>(ProjectMapper.INSTANCE.toDTO(savedProject), HttpStatus.CREATED);
     }
+
     @Operation(summary = "Project finding service", description = "Finding all projects")
     @ApiResponse(
             responseCode = "200",
@@ -56,6 +57,59 @@ public class ProjectController {
         List<ProjectDTO> projectDTOS = new ArrayList<>();
         projects.forEach(project -> projectDTOS.add(ProjectMapper.INSTANCE.toDTO(project)));
         return new ResponseEntity<>(projectDTOS, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Project finding service", description = "Finding one project")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Returns the project found",
+            content = { @Content(schema = @Schema(anyOf = { Project.class })) }
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "No project was found",
+            content = { @Content(schema = @Schema(hidden = true)) }
+    )
+    @GetMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProjectDTO> findById(@PathVariable Long id) {
+        Optional<Project> optionalProject = this.service.findById(id);
+
+        return optionalProject
+                .map(project -> new ResponseEntity<>(ProjectMapper.INSTANCE.toDTO(project), HttpStatus.OK))
+                .orElseGet(() -> {
+                    log.warn("No project with ID ["+id+"] was found");
+                    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                });
+    }
+
+    @Operation(summary = "Project updating service", description = "Update one project")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Returns the project that was updated",
+            content = { @Content(schema = @Schema(anyOf = { Project.class })) }
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "No project was found to be updated",
+            content = { @Content(schema = @Schema(hidden = true)) }
+    )
+    @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @RequestBody ProjectDTO projectDTO) {
+        Optional<Project> optionalProject =
+               Optional.ofNullable(this.service.update(id, ProjectMapper.INSTANCE.toModel(projectDTO)));
+        return optionalProject
+                .map(project -> new ResponseEntity<>(ProjectMapper.INSTANCE.toDTO(project), HttpStatus.CREATED))
+                .orElseGet(() -> {
+                    log.warn("The project was not successfully updated");
+                    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                });
+    }
+
+    @Operation(summary = "Project deletion service", description = "Delete an existing project")
+    @DeleteMapping(path = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProject(@PathVariable Long id) {
+        this.service.delete(id);
     }
 
 }
